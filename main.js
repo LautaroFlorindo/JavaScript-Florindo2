@@ -1,5 +1,6 @@
 let currentUser;
 let exit;
+let logIn;
 let sale;
 
 const chart = []
@@ -91,19 +92,34 @@ function introAndRegister() {
 }
 
 function login() {
-    let option = parseInt(prompt("Para poder ver los productos y navegar en el sitio, necesita iniciar sesión.\n\nPor favor, ingrese una de las siguientes opciones:\n\n1. Iniciar sesión\n2. Salir"))
-    if (option == 1) {
-        userName = prompt("Ingrese su nombre de usuario.")
-        password = prompt("Ingrese su contraseña.")
-        while (userName !== currentUser.userName || password !== currentUser.pass) {
-            alert("Credenciales inválidas. Vuelva a intentarlo.")
-            userName = prompt("Ingrese su nombre de usuario.")
-            password = prompt("Ingrese su contraseña.")
+    let option;
+    do {
+        option = parseInt(prompt("Para poder ver los productos y navegar en el sitio, necesita iniciar sesión.\n\nPor favor, ingrese una de las siguientes opciones:\n\n1. Iniciar sesión\n2. Salir"))
+        switch (option){
+            case 1:
+                let userNameCheck = prompt("Ingrese su nombre de usuario.")
+                let passwordCheck = prompt("Ingrese su contraseña.")
+                while (userNameCheck !== currentUser.userName || passwordCheck !== currentUser.pass) {
+                    alert("Credenciales inválidas. Vuelva a intentarlo.")
+                    userNameCheck = prompt("Ingrese su nombre de usuario.")
+                    passwordCheck = prompt("Ingrese su contraseña.")
+                }
+                if (userNameCheck == currentUser.userName && passwordCheck == currentUser.pass) {
+                    logIn = 1;
+                }
+                break;
+            case 2:
+                exit = 1;
+                bye(0);
+                break;
+            default:
+                alert("Opción no válida.")
+                break;
         }
-    } else if (option == 2) {
-        bye(0)
-    }
+    } while (option !== 1 && option !== 2)
 }
+
+
 
 function menu() {
     let navegation;
@@ -201,7 +217,7 @@ function chartView() {
     }
 }
 
-function chartContent(){
+function chartContent() {
     return chart.map((el, index) => [`
     
         ID: ${index + 1}
@@ -210,7 +226,7 @@ function chartContent(){
         `]).join("")
 }
 
-function chartSplice(id){
+function chartSplice(id) {
     chart.splice(id - 1, 1);
 }
 
@@ -229,13 +245,12 @@ function bye(prop) {
 
 //EJECUCIÓN
 
-
-
-
 introAndRegister();
-if(exit !== 1){
+if (exit !== 1) {
     login()
-    menu()
-} 
+    if (logIn == 1) {
+        menu()
+    }
+}
 
 
